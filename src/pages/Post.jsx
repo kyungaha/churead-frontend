@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import PostInput from "../components/PostInput";
+import { auth } from "../firebase";
 
 const Post = () => {
   // logic
   const history = useNavigate();
+
+  const currentUser = auth.currentUser;
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
+
   const [churead, setChuread] = useState("");
 
+  
   const handleChange = (value) => {
+    console.log(value);
     setChuread(value);
   };
 
@@ -48,7 +55,7 @@ const Post = () => {
         <div className="h-full overflow-auto">
           <form id="post" onSubmit={handlePost}>
             {/* START: 사용자 입력 영역 */}
-            <PostInput onChange={handleChange} />
+            <PostInput userName={currentUser.displayName} userProfileImage={currentUser.photoURL || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"} onChange={handleChange} />
             {/* END: 사용자 입력 영역 */}
             {/* START: 게시 버튼 영역 */}
             <div className="w-full max-w-[572px] flex items-center fixed bottom-0 lef p-6">
