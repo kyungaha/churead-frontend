@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputField from "../components/InputField";
 import LoginButton from "../components/LoginButton";
 import { Link, useNavigate } from "react-router-dom";
 import { GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import { auth } from "../firebase";
+
+// 미션 : 이미 로그인된 사용자는 login페이지 접근 불가
+// home페이지로 리다이렉트 시키기
 
 const Login = () => {
 // logic
@@ -15,6 +18,8 @@ const [password, setPassword] = useState("");
 // 로딩 상태
 const [isLoading, setIsLoading] = useState(false);
 const [errorMessage, setErrorMessage] = useState("");
+
+const isLoggedIn = !!auth.currentUser;
 
 const handleInputChange = (inputValue, field) => {
   if (field === "email") {
@@ -69,6 +74,10 @@ const handleLogin = async (event) => {
       console.error(error);
     }
   };
+
+  useEffect (() => {
+    isLoggedIn && history('/');
+  },[])
 
   // view
   return (
