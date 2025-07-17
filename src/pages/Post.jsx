@@ -18,7 +18,30 @@ const Post = () => {
     setChuread(value);
   };
 
-  const handlePost = (event) => {
+  const createPost = async (postData) => {  
+    try {
+      const response = await fetch(`${API_BASE_URL}/posts`, {
+        method: "POST",
+        headers: {
+          "Content-Type":"Application/json"
+        },
+        body: JSON.stringify(postData) // frontend->backend : stringfy, backend->frontend:parse
+      });
+
+      if(!response.ok) { // response 값이 정상이 아닐때 게시물조회하지 못하도록
+          throw new Error(`HTTP ERROR : status : ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log("🚀 ~ ferchPosts ~ result:", result)
+
+    } catch (error) {
+      
+    }
+
+  }
+
+  const handlePost = async (event) => {
     event.preventDefault(); // 폼 제출시 새로고침 방지 메소드
 
     // 1. 텍스트에서 불필요한 공백 제거하기
@@ -35,6 +58,22 @@ const Post = () => {
 
     // 빈 스트링이 아닌 경우
     // TODO: 백엔드에 Post 요청
+    try {
+      const newItem = {
+        userName: currentUser.displayName,
+        userId : currentUser.uid,
+        userProfileImage : currentUser.photoURL || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y",
+        content : resultChuread
+      }
+      
+      // api 요청
+
+      const result = await createPost(newItem);
+      console.log("🚀 ~ handlePost ~ result:", result)
+      
+    } catch (error) {
+      console.error("게시글 추가 에러: ", error);
+    }
 
     history("/"); // home화면으로 이동
   };

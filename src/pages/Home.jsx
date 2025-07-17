@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import Header from "../components/layout/Header";
 import Nav from "../components/layout/Nav";
 import FeedItem from "../components/FeedItem";
-import { initialTags } from "../data/response";
 import { useNavigate } from "react-router-dom";
 import { auth } from "../firebase";
 
@@ -11,14 +10,13 @@ const Home = () => {
   const history = useNavigate();
 
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
-
+  
   const currentUser = auth.currentUser;
+  const isLoggedIn = !!currentUser;
   console.log("🚀 ~ Home ~ currentUser:", currentUser)
 
   // const [feedList, setFeedList] = useState(initialFeedList);
   const [feedList, setFeedList] = useState([]);
-
-  const isLoggedIn = !!currentUser;
 
   const handleEdit = (data) => {
     history(`/edit/${data._id}`); // edit페이지로 이동
@@ -62,7 +60,7 @@ const Home = () => {
         setFeedList(result);
 
         console.log("🚀 ~ ferchPosts ~ result:", result)
-        
+        // console.log("🚀 ~ ferchPosts ~ feedList length:", feedList.length)
       } catch (error) {
         console.error("게시물 조회 실패: ", error);
       }
@@ -94,8 +92,8 @@ const Home = () => {
               <FeedItem
                 key={feed._id}
                 data={feed}
-                tags={initialTags}
-                isAuthor={true}
+                tags={feed.tags}
+                isAuthor={feed.userId === currentUser.uid}
                 onDelete={handleDelete}
                 onEdit={handleEdit}
                 onLike={handleLike}
