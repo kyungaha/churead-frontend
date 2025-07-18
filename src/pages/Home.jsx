@@ -22,12 +22,36 @@ const Home = () => {
     history(`/edit/${data._id}`); // edit페이지로 이동
   };
 
-  const handleDelete = (selectedItem) => {
-    const filterList = feedList.filter((item) => item.id !== selectedItem.id);
-    setFeedList(filterList);
+// DELETE /posts/:id - 특정 게시물 삭제
+const deletePost = async (id) => {
+  try {
+    const response = await fetch(`${API_BASE_URL}/posts/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-    // TODO: 백엔드에 Delete 요청
-  };
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return result;
+  } catch (error) {
+    console.error("게시물 삭제 실패:", error);
+  }
+};
+
+const handleDelete = async (selectedItem) => {
+  // TODO: 백엔드에 Delete 요청
+  const result = await deletePost(selectedItem._id);
+  console.log("🚀 ~ handleDelete ~ result:", result);
+
+  // UI 업데이트
+  const filterList = feedList.filter((item) => item._id !== selectedItem._id);
+  setFeedList(filterList);
+};
 
   const handleLike = (selectedId) => {
     console.log("🚀 ~ handleLike ~ selectedId:", selectedId)
