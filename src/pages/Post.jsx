@@ -11,7 +11,7 @@ const Post = () => {
   const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 
   const [churead, setChuread] = useState("");
-
+  const [isLoading, setIsLoading] = useState(false);
   
   const handleChange = (value) => {
     console.log(value);
@@ -59,6 +59,7 @@ const Post = () => {
     // 빈 스트링이 아닌 경우
     // TODO: 백엔드에 Post 요청
     try {
+      setIsLoading(true);
       const newItem = {
         userName: currentUser.displayName,
         userId : currentUser.uid,
@@ -73,6 +74,8 @@ const Post = () => {
       
     } catch (error) {
       console.error("게시글 추가 에러: ", error);
+    } finally {
+      setIsLoading(false);
     }
 
     history("/"); // home화면으로 이동
@@ -95,6 +98,7 @@ const Post = () => {
           <form id="post" onSubmit={handlePost}>
             {/* START: 사용자 입력 영역 */}
             <PostInput userName={currentUser.displayName} userProfileImage={currentUser.photoURL || "https://www.gravatar.com/avatar/00000000000000000000000000000000?d=mp&f=y"} onChange={handleChange} />
+            {isLoading?"Loading...":""}
             {/* END: 사용자 입력 영역 */}
             {/* START: 게시 버튼 영역 */}
             <div className="w-full max-w-[572px] flex items-center fixed bottom-0 lef p-6">
