@@ -26,9 +26,14 @@ const useNotification = () => {
     // 권한이 허용된 경우에만 알림 표시
     if (Notification.permission === "granted") {
       console.log("권한있음!!!");
-      new Notification(title, {
-        body: `${userName}님이 새글을 작성하셨습니다.`, // 알림 내용
-      });
+      // new Notification(title, {
+        //   body: `${userName}님이 새글을 작성하셨습니다.` // 알림 내용
+        // });
+        console.log("🚀 ~ showNewPostNotification ~ content:", content)
+        new Notification(title, {
+          body: `${userName}님이 새글을 작성하셨습니다. ${content}`, // 알림 내용
+        });
+      
 
       // 3초 후 자동으로 알림 닫기
       // setTimeout(() => {
