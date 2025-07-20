@@ -18,6 +18,8 @@ useEffect(() => {
 const useNotification = () => {
   // 컴포넌트 마운트 시 알림 권한 요청
   useEffect(() => {
+    if (!isNotificationSupported) return; // 지원 여부 체크하여 실행 [추가]
+  
     // 권한이 아직 결정되지 않은 경우 권한 요청
     if (Notification.permission === "default") {
       console.log("권한을 설정해주세요");
@@ -25,7 +27,7 @@ const useNotification = () => {
         console.log("알림 권한 상태:", permission);
       });
     }
-  }, []);
+  }, [isNotificationSupported]);
 
   /**
    * 새 게시물 알림을 표시하는 함수
@@ -33,6 +35,8 @@ const useNotification = () => {
    * @param {object} postData - 게시물 데이터 { userName, content }
    */
   const showNewPostNotification = (title, { userName, content }) => {
+    if (!isNotificationSupported) return; // 지원 여부 체크하여 실행 
+    
     // 권한이 허용된 경우에만 알림 표시
     if (Notification.permission === "granted") {
       console.log("권한있음!!!");
