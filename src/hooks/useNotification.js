@@ -1,5 +1,5 @@
 // hooks/useNotification.js
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * 브라우저 알림 기능을 관리하는 훅
