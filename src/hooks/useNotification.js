@@ -5,6 +5,16 @@ import { useEffect } from "react";
  * 브라우저 알림 기능을 관리하는 훅
  * 권한 요청 및 알림 표시 기능 제공
  */
+
+// Notification 지원 여부 [추가]
+const [isNotificationSupported, setIsNotificationSupported] = useState(false);
+
+// 알림 지원여부 세팅 [추가]
+useEffect(() => {
+  const isSupported = typeof window !== "undefined" && "Notification" in window;
+  setIsNotificationSupported(isSupported);
+}, []);
+
 const useNotification = () => {
   // 컴포넌트 마운트 시 알림 권한 요청
   useEffect(() => {
